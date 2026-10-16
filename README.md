@@ -1,4 +1,4 @@
-﻿# LumaGram
+# LumaGram
 
 ![LumaGram Logo](.github/LumaGram.png) ![AyuChan](.github/AyuChan.png)
 

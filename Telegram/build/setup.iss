@@ -1,4 +1,4 @@
-﻿#define MyAppShortName "LumaGram"
+#define MyAppShortName "LumaGram"
 #define MyAppName "LumaGram Desktop"
 #define MyAppPublisher "Radolyn Labs"
 #define MyAppURL "https://github.com/LumaGram"

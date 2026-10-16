@@ -1,4 +1,4 @@
-﻿# Contributing
+# Contributing
 
 This document describes how you can contribute to LumaGram Desktop.
 

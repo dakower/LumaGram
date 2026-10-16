@@ -1,0 +1,22 @@
+[Desktop Entry]
+Name=LumaGram Desktop
+Comment=Desktop version of LumaGram - ToS breaking Telegram client
+TryExec=LumaGram
+Exec=env DESKTOPINTEGRATION=1 LumaGram -- %U
+Icon=com.lumagram.desktop
+Terminal=false
+StartupWMClass=LumaGram
+Type=Application
+Categories=Chat;Network;InstantMessaging;Qt;
+MimeType=x-scheme-handler/tg;x-scheme-handler/tonsite;
+Keywords=tg;chat;im;messaging;messenger;sms;telegram;tdesktop;
+Actions=quit;
+DBusActivatable=true
+SingleMainWindow=true
+X-GNOME-UsesNotifications=true
+X-GNOME-SingleWindow=true
+
+[Desktop Action quit]
+Exec=LumaGram -quit
+Name=Quit LumaGram
+Icon=application-exit

@@ -1,4 +1,4 @@
-﻿# Build instructions for Windows 64-bit
+# Build instructions for Windows 64-bit
 
 - [Prepare folder](#prepare-folder)
 - [Install third party software](#install-third-party-software)

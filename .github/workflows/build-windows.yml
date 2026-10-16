@@ -87,7 +87,7 @@ jobs:
             !${{ env.LibrariesPath }}\[qQ]t[_-]*
             ${{ env.LibrariesPath }}\cache_keys\*
             !${{ env.LibrariesPath }}\cache_keys\[qQ]t[_-]*
-          key: ${{ runner.OS }}-x64-libs-v2rel-${{ env.CACHE_KEY }}-${{ github.run_number }}
+          key: ${{ runner.OS }}-x64-libs-v2rel-${{ env.CACHE_KEY }}-4
           restore-keys: |
             ${{ runner.OS }}-x64-libs-v2rel-${{ env.CACHE_KEY }}-
             ${{ runner.OS }}-x64-libs-v2rel-
@@ -99,7 +99,7 @@ jobs:
           path: |
             ${{ env.LibrariesPath }}\[qQ]t[_-]*
             ${{ env.LibrariesPath }}\cache_keys\[qQ]t[_-]*
-          key: ${{ runner.OS }}-x64-qtrel-${{ env.CACHE_KEY }}-${{ github.run_number }}
+          key: ${{ runner.OS }}-x64-qtrel-${{ env.CACHE_KEY }}-4
           restore-keys: |
             ${{ runner.OS }}-x64-qtrel-${{ env.CACHE_KEY }}-
             ${{ runner.OS }}-x64-qtrel-
@@ -109,7 +109,7 @@ jobs:
           %TBUILD%\%REPO_NAME%\Telegram\build\prepare\win.bat silent
 
       - name: Free up some disk space
-        if: always()
+        if: always() && steps.cache-libs.outputs.cache-hit != 'true'
         shell: bash
         run: find $LibrariesPath '(' '(' ! '(' -name '*.lib' -o -name '*.a' -o -name '*.exe' -o -name '*.h' -o -name '*.hpp' -o -name '*.inc' -o -name '*.cmake' -o -name '*.pc' -o -path '*/include/*' -o -path '*/objects-*' -o -path '*/cache_keys/*' -o -path '*/patches/*' -o -path '*/nv-codec-headers/*' ')' -type f ')' -o -empty ')' -delete || true
 
@@ -155,18 +155,18 @@ jobs:
             "$(random_key)" > $TBUILD/DesktopPrivate/alpha_private.h
 
       - name: Configure and Build LumaGram
+        shell: pwsh
         run: |
-          cd %TBUILD%\%REPO_NAME%\Telegram
-          call configure.bat ^
-            x64 ^
-            -D TDESKTOP_API_ID=2040 ^
-            -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 ^
-            -D CMAKE_CONFIGURATION_TYPES=Release ^
-            -D DESKTOP_APP_SPECIAL_TARGET=win64 ^
-            -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON ^
-            -D DESKTOP_APP_DISABLE_CRASH_REPORTS=ON
+          Set-Location "$env:TBUILD\$env:REPO_NAME\Telegram"
+          cmd /c "configure.bat x64 -D TDESKTOP_API_ID=2040 -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 -D CMAKE_CONFIGURATION_TYPES=Release -D DESKTOP_APP_SPECIAL_TARGET=win64 -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON -D DESKTOP_APP_DISABLE_CRASH_REPORTS=ON"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-          cmake --build ..\out --config Release --target Telegram --parallel
+          cmake --build ..\out --config Release --target Telegram --parallel 2>&1 | Tee-Object -FilePath "$env:TBUILD\build.log"
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "=== COMPILER ERRORS SUMMARY ==="
+            Select-String -Path "$env:TBUILD\build.log" -Pattern "error C|error LNK|error RC|CUSTOMBUILD : error|RCC: Error|Error :" -Context 2,2 | ForEach-Object { Write-Host $_.ToString() }
+            exit 1
+          }
 
       - name: Package Release
         shell: bash

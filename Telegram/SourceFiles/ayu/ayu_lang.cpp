@@ -118,10 +118,10 @@ void AyuLanguage::fetchLanguage(const QString &id, const QString &baseId) {
 	// https://crowdin.com/project/lumagram/discussions/6
 	QUrl url;
 	if (!finalLangPackId.isEmpty() && !baseId.isEmpty() && !needFallback) {
-		url.setUrl(qsl("https://cdn.jsdelivr.net/gh/LumaGram/Languages@l10n_main/values/langs/%1/Shared.json").arg(
+		url.setUrl(qsl("https://cdn.jsdelivr.net/gh/AyuGram/Languages@l10n_main/values/langs/%1/Shared.json").arg(
 			finalLangPackId));
 	} else {
-		url.setUrl(qsl("https://cdn.jsdelivr.net/gh/LumaGram/Languages@l10n_main/values/langs/%1/Shared.json").arg(
+		url.setUrl(qsl("https://cdn.jsdelivr.net/gh/AyuGram/Languages@l10n_main/values/langs/%1/Shared.json").arg(
 			needFallback ? baseId : finalLangPackId));
 	}
 	_chkReply = networkManager.get(QNetworkRequest(url));

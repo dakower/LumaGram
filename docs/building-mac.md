@@ -1,4 +1,4 @@
-﻿## Build instructions for macOS
+## Build instructions for macOS
 
 ### Prepare folder
 

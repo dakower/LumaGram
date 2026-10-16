@@ -1,4 +1,4 @@
-﻿## Build instructions for Linux using Docker
+## Build instructions for Linux using Docker
 
 ### Prepare folder
 
