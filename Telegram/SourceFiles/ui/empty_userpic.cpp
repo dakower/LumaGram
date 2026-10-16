@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -21,7 +21,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include <QtCore/QMutex>
 #include <QtSvg/QSvgRenderer>
 
-// AyuGram includes
+// LumaGram includes
 #include "ayu/ayu_settings.h"
 #include "ayu/ui/ayu_userpic.h"
 

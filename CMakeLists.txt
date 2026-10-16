@@ -1,4 +1,4 @@
-# This file is part of Telegram Desktop,
+﻿# This file is part of Telegram Desktop,
 # the official desktop application for the Telegram messaging service.
 #
 # For license and copyright information please follow this link:
@@ -19,8 +19,8 @@ endif()
 project(Telegram
     LANGUAGES C CXX
     VERSION ${desktop_app_version_cmake}
-    DESCRIPTION "AyuGram Desktop"
-    HOMEPAGE_URL "https://ayugram.one"
+    DESCRIPTION "LumaGram Desktop"
+    HOMEPAGE_URL "https://lumagram.one"
 )
 
 if (APPLE)

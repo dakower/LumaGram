@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -46,7 +46,7 @@ int APIENTRY wWinMain(
 		ShellExecute(
 			nullptr,
 			nullptr,
-			(directory + L"\\AyuGram.exe").c_str(),
+			(directory + L"\\LumaGram.exe").c_str(),
 			L"-autostart",
 			directory.data(),
 			SW_SHOWNORMAL);

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -1046,7 +1046,7 @@ TextWithEntities SingleCustomEmoji(not_null<DocumentData*> document) {
 bool AllowEmojiWithoutPremium(
 		not_null<PeerData*> peer,
 		DocumentData *exactEmoji) {
-	if (true) { // AyuGram: allow all premium emojis (via tg://emoji?id=...)
+	if (true) { // LumaGram: allow all premium emojis (via tg://emoji?id=...)
 		return true;
 	}
 

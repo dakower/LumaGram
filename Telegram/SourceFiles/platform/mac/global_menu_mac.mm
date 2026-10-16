@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -33,7 +33,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 
 #include <Cocoa/Cocoa.h>
 
-// AyuGram includes
+// LumaGram includes
 #include "ayu/ayu_settings.h"
 
 
@@ -421,7 +421,7 @@ void Manager::buildAppleMenu(QMenu *main) {
 			});
 		};
 		const auto about = main->addAction(
-			u"About AyuGram"_q,
+			u"About LumaGram"_q,
 			std::move(callback));
 		about->setMenuRole(QAction::AboutQtRole);
 	}
@@ -723,7 +723,7 @@ void Manager::buildWindowMenu(QMenu *window) {
 }
 
 void Manager::buildMenu() {
-	buildAppleMenu(_menuBar->addMenu(u"AyuGram"_q));
+	buildAppleMenu(_menuBar->addMenu(u"LumaGram"_q));
 	buildFileMenu(_menuBar->addMenu(u"File"_q));
 	buildEditMenu(_menuBar->addMenu(u"Edit"_q));
 

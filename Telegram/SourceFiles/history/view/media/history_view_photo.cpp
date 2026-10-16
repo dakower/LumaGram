@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -45,7 +45,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "core/ui_integration.h"
 #include "styles/style_chat.h"
 
-// AyuGram includes
+// LumaGram includes
 #include "ayu/features/message_shot/message_shot.h"
 #include "ayu/ui/ayu_userpic.h"
 

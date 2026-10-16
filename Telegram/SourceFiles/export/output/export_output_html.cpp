@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -3922,7 +3922,7 @@ auto HtmlWriter::Wrap::pushMessage(
 			dialog,
 			basePath,
 			"This message is not supported by this version "
-			"of AyuGram Desktop. Please update the application.") };
+			"of LumaGram Desktop. Please update the application.") };
 	}
 
 	const auto wrapReplyToLink = [&](const QByteArray &text) {

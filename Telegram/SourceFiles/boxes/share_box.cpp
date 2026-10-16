@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -67,7 +67,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include <QtGui/QGuiApplication>
 #include <QtGui/QClipboard>
 
-// AyuGram includes
+// LumaGram includes
 #include "ayu/features/forward/ayu_forward.h"
 
 
@@ -1866,7 +1866,7 @@ ShareBox::SubmitCallback ShareBox::DefaultForwardCallback(
 			&& result.front()->peer()->isSelf()
 			&& history->session().premium();
 
-		// AyuGram-changed
+		// LumaGram-changed
 		const auto dismiss = [=]
 		{
 			if (show->valid()) {
@@ -1901,7 +1901,7 @@ ShareBox::SubmitCallback ShareBox::DefaultForwardCallback(
 			dismiss();
 			return;
 		}
-		// AyuGram-changed
+		// LumaGram-changed
 
 		for (const auto &thread : result) {
 			const auto peer = thread->peer();

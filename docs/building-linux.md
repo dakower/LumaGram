@@ -1,4 +1,4 @@
-## Build instructions for Linux using Docker
+﻿## Build instructions for Linux using Docker
 
 ### Prepare folder
 
@@ -8,7 +8,7 @@ Choose a folder for the future build, for example **/home/user/TBuild**. It will
 
 Install [poetry](https://python-poetry.org), [docker](https://www.docker.com/) and [docker-buildx](https://docs.docker.com/reference/cli/docker/buildx/), go to ***BuildPath*** and run
 
-    git clone --recursive https://github.com/AyuGram/AyuGramDesktop.git tdesktop
+    git clone --recursive https://github.com/LumaGram/LumaGramDesktop.git tdesktop
     ./tdesktop/Telegram/build/prepare/linux.sh
 
 ### Building the project

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -108,7 +108,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include <QtWidgets/QScrollBar>
 #include <QtWidgets/QTextEdit>
 
-// AyuGram includes
+// LumaGram includes
 #include "ayu/ayu_settings.h"
 #include "ayu/utils/telegram_helpers.h"
 #include "base/platform/base_platform_haptic.h"
@@ -1773,7 +1773,7 @@ void Widget::setupMainMenuToggle() {
 }
 
 void Widget::setupStories() {
-	// AyuGram disableStories
+	// LumaGram disableStories
 	const auto &settings = AyuSettings::getInstance();
 	if (settings.disableStories()) {
 		return;
@@ -2693,7 +2693,7 @@ void Widget::checkUpdateStatus() {
 		}
 		_updateTelegram.create(
 			this,
-			tr::ayu_UpdateAyuGram(tr::now),
+			tr::ayu_UpdateLumaGram(tr::now),
 			st::dialogsUpdateButton,
 			st::dialogsInstallUpdate,
 			st::dialogsInstallUpdateOver,

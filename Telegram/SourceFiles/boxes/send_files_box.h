@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -355,7 +355,7 @@ private:
 
 	rpl::event_stream<TextWithTags> _textWithTagsRequests;
 
-	// AyuGram files reordering
+	// LumaGram files reordering
 
 	[[nodiscard]] bool isFileBlock(int i) const;
 	void moveFile(int from, int to);

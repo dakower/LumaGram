@@ -1,4 +1,4 @@
-<RCC>
+﻿<RCC>
   <qresource prefix="/gui">
     <file alias="art/background.tgv">../../art/background.tgv</file>
     <file alias="art/bg_thumbnail.png">../../art/bg_thumbnail.png</file>
@@ -87,6 +87,6 @@
   </qresource>
   <qresource prefix="/misc">
     <file alias="default_shortcuts-custom.json">../../default_shortcuts-custom.json</file>
-    <file alias="com.ayugram.desktop.desktop">../../../../lib/xdg/com.ayugram.desktop.desktop</file>
+    <file alias="com.lumagram.desktop.desktop">../../../../lib/xdg/com.lumagram.desktop.desktop</file>
   </qresource>
 </RCC>

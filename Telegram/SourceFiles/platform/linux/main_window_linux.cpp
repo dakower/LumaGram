@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -221,7 +221,7 @@ void MainWindow::createGlobalMenu() {
 		});
 
 	auto quit = file->addAction(
-		tr::lng_mac_menu_quit_telegram(tr::now, lt_telegram, u"AyuGram"_q),
+		tr::lng_mac_menu_quit_telegram(tr::now, lt_telegram, u"LumaGram"_q),
 		this,
 		[=] { quitFromTray(); },
 		QKeySequence::Quit);
@@ -420,7 +420,7 @@ void MainWindow::createGlobalMenu() {
 		tr::lng_mac_menu_about_telegram(
 			tr::now,
 			lt_telegram,
-			u"AyuGram"_q),
+			u"LumaGram"_q),
 		[=] {
 			ensureWindowShown();
 			controller().show(Box(AboutBox, sessionController()));
