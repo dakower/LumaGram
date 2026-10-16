@@ -58,6 +58,7 @@ jobs:
           git config --global user.name "Sample"
 
           echo "Freeing disk space on runner drives..."
+          df -h
           rm -rf /c/hostedtoolcache/windows/Java* || true
           rm -rf /c/hostedtoolcache/windows/Ruby* || true
           rm -rf /c/hostedtoolcache/windows/go* || true
@@ -68,6 +69,15 @@ jobs:
           rm -rf /c/SeleniumWebDrivers || true
           rm -rf /c/tools/php || true
           rm -rf /c/vcpkg || true
+          rm -rf "/c/Program Files/MongoDB" || true
+          rm -rf "/c/Program Files/MySQL" || true
+          rm -rf "/c/Program Files/PostgreSQL" || true
+          rm -rf "/c/Program Files (x86)/Android" || true
+          rm -rf "/c/Program Files/dotnet/shared" || true
+          rm -rf "/c/Program Files/dotnet/sdk" || true
+          rm -rf "/c/Program Files/Microsoft SQL Server" || true
+          rm -rf /c/ghcup /c/cabal /c/mingw64 /c/Strawberry || true
+          df -h
 
       - name: Native Tools Command Prompt
         uses: Eden-CI/msvc-dev-cmd@1bd71f95d6f3d1b2b3395b335cc63bcdc90cf223
@@ -160,6 +170,15 @@ jobs:
             ${{ env.LibrariesPath }}\cache_keys\[qQ]t[_-]*
           key: ${{ steps.cache-qt.outputs.cache-primary-key }}
 
+      - name: Clean unneeded ThirdParty tools before main build
+        shell: bash
+        run: |
+          rm -rf $TBUILD/ThirdParty/msys64 || true
+          rm -rf $TBUILD/ThirdParty/rust || true
+          rm -rf $TBUILD/ThirdParty/emsdk || true
+          rm -rf $LibrariesPath/qt_5* || true
+          df -h
+
       - name: Generate stub DesktopPrivate
         shell: bash
         run: |
@@ -180,7 +199,7 @@ jobs:
           cmd /c "configure.bat x64 -D TDESKTOP_API_ID=2040 -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 -D CMAKE_CONFIGURATION_TYPES=Release -D DESKTOP_APP_SPECIAL_TARGET=win64 -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON -D DESKTOP_APP_DISABLE_CRASH_REPORTS=ON"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-          cmake --build ..\out --config Release --target Telegram --parallel 2>&1 | Tee-Object -FilePath "$env:TBUILD\build.log"
+          cmake --build ..\out --config Release --target Telegram -- /m:1 /p:CL_MPCount=3 2>&1 | Tee-Object -FilePath "$env:TBUILD\build.log"
           if ($LASTEXITCODE -ne 0) {
             Write-Host "=== COMPILER ERRORS SUMMARY ==="
             Select-String -Path "$env:TBUILD\build.log" -Pattern "error C|error LNK|error RC|CUSTOMBUILD : error|RCC: Error|Error :" -Context 2,2 | ForEach-Object { Write-Host $_.ToString() }
