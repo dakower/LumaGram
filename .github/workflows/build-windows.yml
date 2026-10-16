@@ -57,6 +57,14 @@ jobs:
           git config --global user.email "you@example.com"
           git config --global user.name "Sample"
 
+          echo "Freeing disk space on runner drives..."
+          rm -rf /c/hostedtoolcache || true
+          rm -rf /c/npm || true
+          rm -rf "$LOCALAPPDATA/Android" || true
+          rm -rf "$LOCALAPPDATA/pip" || true
+          rm -rf /c/SeleniumWebDrivers || true
+          rm -rf /c/tools/php || true
+
       - name: Native Tools Command Prompt
         uses: Eden-CI/msvc-dev-cmd@1bd71f95d6f3d1b2b3395b335cc63bcdc90cf223
         with:
@@ -109,9 +117,16 @@ jobs:
           %TBUILD%\%REPO_NAME%\Telegram\build\prepare\win.bat silent
 
       - name: Free up some disk space
-        if: always() && steps.cache-libs.outputs.cache-hit != 'true'
         shell: bash
-        run: find $LibrariesPath '(' '(' ! '(' -name '*.lib' -o -name '*.a' -o -name '*.exe' -o -name '*.h' -o -name '*.hpp' -o -name '*.inc' -o -name '*.cmake' -o -name '*.pc' -o -path '*/include/*' -o -path '*/objects-*' -o -path '*/cache_keys/*' -o -path '*/patches/*' -o -path '*/nv-codec-headers/*' ')' -type f ')' -o -empty ')' -delete || true
+        run: |
+          find $LibrariesPath '(' '(' ! '(' -name '*.lib' -o -name '*.a' -o -name '*.exe' -o -name '*.h' -o -name '*.hpp' -o -name '*.inc' -o -name '*.cmake' -o -name '*.pc' -o -path '*/include/*' -o -path '*/objects-*' -o -path '*/cache_keys/*' -o -path '*/patches/*' -o -path '*/nv-codec-headers/*' ')' -type f ')' -o -empty ')' -delete || true
+          rm -rf $LibrariesPath/*/.git || true
+          rm -rf $LibrariesPath/*/builddir* || true
+          rm -rf $LibrariesPath/*/out.x86_64 || true
+          rm -rf $LibrariesPath/*/out.arm64 || true
+          rm -rf $LibrariesPath/*/target/x86_64* || true
+          rm -rf $LibrariesPath/tg_owt/out || true
+          rm -rf $LibrariesPath/tde2e/out || true
 
       - name: Save ThirdParty cache
         if: always() && steps.cache-third-party.outputs.cache-hit != 'true'
