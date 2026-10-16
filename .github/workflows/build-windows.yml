@@ -77,6 +77,12 @@ jobs:
           key: ${{ runner.OS }}-x64-qt-v1
           restore-keys: ${{ runner.OS }}-x64-qt-
 
+      - name: Git setup
+        shell: bash
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Sample"
+
       - name: Build Libraries
         run: |
           %TBUILD%\%REPO_NAME%\Telegram\build\prepare\win.bat silent
