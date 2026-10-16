@@ -23,6 +23,7 @@ add_subdirectory(codegen)
 
 # LumaGram filters
 add_subdirectory(lib_icu)
+add_library(lumagram::lib_icu ALIAS icu_regex_minimal)
 # LumaGram filters
 
 get_filename_component(src_loc SourceFiles REALPATH)
