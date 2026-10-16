@@ -58,12 +58,16 @@ jobs:
           git config --global user.name "Sample"
 
           echo "Freeing disk space on runner drives..."
-          rm -rf /c/hostedtoolcache || true
+          rm -rf /c/hostedtoolcache/windows/Java* || true
+          rm -rf /c/hostedtoolcache/windows/Ruby* || true
+          rm -rf /c/hostedtoolcache/windows/go* || true
+          rm -rf /c/hostedtoolcache/windows/stack* || true
           rm -rf /c/npm || true
           rm -rf "$LOCALAPPDATA/Android" || true
           rm -rf "$LOCALAPPDATA/pip" || true
           rm -rf /c/SeleniumWebDrivers || true
           rm -rf /c/tools/php || true
+          rm -rf /c/vcpkg || true
 
       - name: Native Tools Command Prompt
         uses: Eden-CI/msvc-dev-cmd@1bd71f95d6f3d1b2b3395b335cc63bcdc90cf223
