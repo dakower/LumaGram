@@ -549,8 +549,6 @@ win:
     SET "ToolsetProp="
 winarm:
     SET "ToolsetProp=/property:PlatformToolset=v145"
-win:
-    msbuild -m LzmaLib.sln /property:Configuration=Debug /property:Platform="$X8664" %ToolsetProp%
 release:
     msbuild -m LzmaLib.sln /property:Configuration=Release /property:Platform="$X8664" %ToolsetProp%
 """)
@@ -580,7 +578,6 @@ win:
         -DZLIB_BUILD_MINIZIP=ON ^
         -DZLIB_MINIZIP_BUILD_SHARED=OFF ^
         -DZLIB_MINIZIP_BUILD_TESTING=OFF
-    cmake --build . --config Debug
 release:
     cmake --build . --config Release
 mac:
@@ -613,7 +610,6 @@ win:
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ^
         -DWITH_JPEG8=ON ^
         -DPNG_SUPPORTED=OFF
-    cmake --build . --config Debug
 release:
     cmake --build . --config Release
 mac:
@@ -645,22 +641,6 @@ mac:
 stage('openssl3', """
     git clone -b openssl-3.2.1 https://github.com/openssl/openssl openssl3
     cd openssl3
-win32:
-    perl Configure no-shared no-tests debug-VC-WIN32 /FS
-win64:
-    perl Configure no-shared no-tests debug-VC-WIN64A /FS
-winarm:
-    perl Configure no-shared no-tests debug-VC-WIN64-ARM /FS
-win:
-    jom -j%NUMBER_OF_PROCESSORS% build_libs
-    mkdir out.dbg
-    move libcrypto.lib out.dbg
-    move libssl.lib out.dbg
-    move ossl_static.pdb out.dbg
-release:
-    move out.dbg\\ossl_static.pdb out.dbg\\ossl_static
-    jom clean
-    move out.dbg\\ossl_static out.dbg\\ossl_static.pdb
 win32_release:
     perl Configure no-shared no-tests VC-WIN32 /FS
 win64_release:
@@ -696,7 +676,6 @@ win:
     cmake -B out . ^
         -DCMAKE_INSTALL_PREFIX=%LIBS_DIR%/local ^
         -DOPUS_STATIC_RUNTIME=ON
-    cmake --build out --config Debug
     cmake --build out --config Release
     cmake --install out --config Release
 mac:
@@ -715,7 +694,6 @@ stage('rnnoise', """
     cd out
 win:
     cmake .. -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded$<$<CONFIG:Debug>:Debug>"
-    cmake --build . --config Debug
 release:
     cmake --build . --config Release
 !win:
@@ -797,9 +775,6 @@ win:
 
 depends:python/Scripts/activate.bat
     %THIRDPARTY_DIR%\\python\\Scripts\\activate.bat
-    meson setup --cross-file %FILE% --prefix %LIBS_DIR%/local --default-library=static --buildtype=debug -Denable_tools=false -Denable_tests=false %DAV1D_ASM_DISABLE% -Db_vscrt=mtd builddir-debug
-    meson compile -C builddir-debug
-    meson install -C builddir-debug
 release:
     meson setup --cross-file %FILE% --prefix %LIBS_DIR%/local --default-library=static --buildtype=release -Denable_tools=false -Denable_tests=false -Db_vscrt=mt builddir-release
     meson compile -C builddir-release
@@ -857,9 +832,6 @@ win:
 
 depends:python/Scripts/activate.bat
     %THIRDPARTY_DIR%\\python\\Scripts\\activate.bat
-    meson setup --cross-file %FILE% --prefix %LIBS_DIR%/local --default-library=static --buildtype=debug -Db_vscrt=mtd builddir-debug
-    meson compile -C builddir-debug
-    meson install -C builddir-debug
 release:
     meson setup --cross-file %FILE% --prefix %LIBS_DIR%/local --default-library=static --buildtype=release -Db_vscrt=mt builddir-release
     meson compile -C builddir-release
@@ -902,8 +874,6 @@ win:
         -DAVIF_ENABLE_WERROR=OFF ^
         -DAVIF_CODEC_DAV1D=SYSTEM ^
         -DAVIF_LIBYUV=OFF
-    cmake --build . --config Debug
-    cmake --install . --config Debug
 release:
     cmake --build . --config Release
     cmake --install . --config Release
@@ -933,8 +903,6 @@ win:
         -DBUILD_SHARED_LIBS=OFF ^
         -DENABLE_DECODER=OFF ^
         -DENABLE_ENCODER=OFF
-    cmake --build . --config Debug
-    cmake --install . --config Debug
 release:
     cmake --build . --config Release
     cmake --install . --config Release
@@ -955,7 +923,6 @@ stage('libwebp', """
     git clone -b v1.6.0 https://github.com/webmproject/libwebp.git
     cd libwebp
 win:
-    nmake /f Makefile.vc CFG=debug-static OBJDIR=out RTLIBCFG=static all
     nmake /f Makefile.vc CFG=release-static OBJDIR=out RTLIBCFG=static all
     copy out\\release-static\\$X8664\\lib\\libwebp.lib out\\release-static\\$X8664\\lib\\webp.lib
     copy out\\release-static\\$X8664\\lib\\libwebpdemux.lib out\\release-static\\$X8664\\lib\\webpdemux.lib
@@ -1017,8 +984,6 @@ win:
         -DCMAKE_DISABLE_FIND_PACKAGE_JPEG=TRUE ^
         -DCMAKE_DISABLE_FIND_PACKAGE_PNG=TRUE ^
         -DWITH_EXAMPLES=OFF
-    cmake --build . --config Debug
-    cmake --install . --config Debug
 release:
     cmake --build . --config Release
     cmake --install . --config Release
@@ -1079,8 +1044,6 @@ win:
         -DCMAKE_C_FLAGS="/DJXL_STATIC_DEFINE /DJXL_THREADS_STATIC_DEFINE /DJXL_CMS_STATIC_DEFINE" ^
         -DCMAKE_CXX_FLAGS="/DJXL_STATIC_DEFINE /DJXL_THREADS_STATIC_DEFINE /DJXL_CMS_STATIC_DEFINE" ^
         %cmake_defines%
-    cmake --build . --config Debug
-    cmake --install . --config Debug
 release:
     cmake --build . --config Release
     cmake --install . --config Release
@@ -1161,8 +1124,6 @@ stage('liblcms2', """
 win:
 depends:python/Scripts/activate.bat
     %THIRDPARTY_DIR%\\python\\Scripts\\activate.bat
-    meson setup --default-library=static --buildtype=debug -Db_vscrt=mtd out/Debug
-    meson compile -C out/Debug
     meson setup --default-library=static --buildtype=release -Db_vscrt=mt out/Release
     meson compile -C out/Release
     deactivate
@@ -1391,7 +1352,6 @@ win:
         -D ALSOFT_UTILS=OFF ^
         -D ALSOFT_EXAMPLES=OFF ^
         -D ALSOFT_TESTS=OFF
-    cmake --build build --config Debug
 release:
     cmake --build build --config RelWithDebInfo
 mac:
@@ -1424,49 +1384,6 @@ depends:patches/breakpad.diff
     PYTHONPATH=$THIRDPARTY_DIR/gyp python3 gyp_breakpad
     cd ../processor
     xcodebuild -project processor.xcodeproj -target minidump_stackwalk -configuration Release build
-""")
-
-stage('breakpad', """
-    git clone https://chromium.googlesource.com/breakpad/breakpad
-    cd breakpad
-    git checkout dfcb7b6799
-depends:patches/breakpad.diff
-    git apply ../patches/breakpad.diff
-    git clone -b release-1.11.0 https://github.com/google/googletest src/testing
-win:
-    SET "PYTHONUTF8=1"
-    SET "FolderPostfix="
-    SET "ToolsetProp="
-win64:
-    SET "FolderPostfix=_x64"
-winarm:
-    SET "FolderPostfix=_ARM64"
-    SET "ToolsetProp=/property:PlatformToolset=v145"
-win:
-depends:python/Scripts/activate.bat
-    %THIRDPARTY_DIR%\\python\\Scripts\\activate.bat
-    cd src\\client\\windows
-    gyp --no-circular-check breakpad_client.gyp --format=ninja
-    cd ..\\..
-    ninja -C out/Debug%FolderPostfix% common crash_generation_client exception_handler
-release:
-    ninja -C out/Release%FolderPostfix% common crash_generation_client exception_handler
-    cd tools\\windows\\dump_syms
-    gyp dump_syms.gyp --format=msvs
-    msbuild -m dump_syms.vcxproj /property:Configuration=Release /property:Platform="x64" %ToolsetProp%
-win:
-    deactivate
-mac:
-    git clone https://chromium.googlesource.com/linux-syscall-support src/third_party/lss
-    cd src/third_party/lss
-    git checkout e1e7b0ad8e
-    cd ../../..
-    cd src/client/mac
-    xcodebuild -project Breakpad.xcodeproj -target Breakpad -configuration Debug build
-release:
-    xcodebuild -project Breakpad.xcodeproj -target Breakpad -configuration Release build
-    cd ../../tools/mac/dump_syms
-    xcodebuild -project dump_syms.xcodeproj -target dump_syms -configuration Release build
 """)
 
 stage('crashpad', """
@@ -1539,7 +1456,6 @@ win:
     cmake -B out ^
         -DTG_ANGLE_SPECIAL_TARGET=%SPECIAL_TARGET% ^
         -DTG_ANGLE_ZLIB_INCLUDE_PATH=%LIBS_DIR%/zlib
-    cmake --build out --config Debug
 release:
     cmake --build out --config Release
 """)
@@ -1561,9 +1477,9 @@ win:
     )
     cd ..
 
-    SET CONFIGURATIONS=-debug
+    SET CONFIGURATIONS=-release
 release:
-    SET CONFIGURATIONS=-debug-and-release
+    SET CONFIGURATIONS=-release
 win:
     """ + removeDir('"%LIBS_DIR%\\Qt-' + qt + '"') + """
     SET ANGLE_DIR=%LIBS_DIR%\\tg_angle
@@ -1575,7 +1491,6 @@ win:
     SET WEBP_DIR=%LIBS_DIR%\\libwebp
     configure -prefix "%LIBS_DIR%\\Qt-%QT%" ^
         %CONFIGURATIONS% ^
-        -force-debug-info ^
         -opensource ^
         -confirm-license ^
         -static ^
@@ -1584,17 +1499,17 @@ win:
         -I "%ANGLE_DIR%\\include" ^
         -D "KHRONOS_STATIC=" ^
         -D "DESKTOP_APP_QT_STATIC_ANGLE=" ^
-        QMAKE_LIBS_OPENGL_ES2_DEBUG="%ANGLE_LIBS_DIR%\\Debug\\tg_angle.lib %ZLIB_LIBS_DIR%\\Debug\\libzsd.lib d3d9.lib dxgi.lib dxguid.lib" ^
+        QMAKE_LIBS_OPENGL_ES2_DEBUG="%ANGLE_LIBS_DIR%\\Release\\tg_angle.lib %ZLIB_LIBS_DIR%\\Release\\libzs.lib d3d9.lib dxgi.lib dxguid.lib" ^
         QMAKE_LIBS_OPENGL_ES2_RELEASE="%ANGLE_LIBS_DIR%\\Release\\tg_angle.lib %ZLIB_LIBS_DIR%\\Release\\libzs.lib d3d9.lib dxgi.lib dxguid.lib" ^
         -egl ^
-        QMAKE_LIBS_EGL_DEBUG="%ANGLE_LIBS_DIR%\\Debug\\tg_angle.lib %ZLIB_LIBS_DIR%\\Debug\\libzsd.lib d3d9.lib dxgi.lib dxguid.lib Gdi32.lib User32.lib" ^
+        QMAKE_LIBS_EGL_DEBUG="%ANGLE_LIBS_DIR%\\Release\\tg_angle.lib %ZLIB_LIBS_DIR%\\Release\\libzs.lib d3d9.lib dxgi.lib dxguid.lib Gdi32.lib User32.lib" ^
         QMAKE_LIBS_EGL_RELEASE="%ANGLE_LIBS_DIR%\\Release\\tg_angle.lib %ZLIB_LIBS_DIR%\\Release\\libzs.lib d3d9.lib dxgi.lib dxguid.lib Gdi32.lib User32.lib" ^
         -openssl-linked ^
         -I "%OPENSSL_DIR%\\include" ^
-        OPENSSL_LIBS_DEBUG="%OPENSSL_LIBS_DIR%.dbg\\libssl.lib %OPENSSL_LIBS_DIR%.dbg\\libcrypto.lib Ws2_32.lib Gdi32.lib Advapi32.lib Crypt32.lib User32.lib" ^
+        OPENSSL_LIBS_DEBUG="%OPENSSL_LIBS_DIR%\\libssl.lib %OPENSSL_LIBS_DIR%\\libcrypto.lib Ws2_32.lib Gdi32.lib Advapi32.lib Crypt32.lib User32.lib" ^
         OPENSSL_LIBS_RELEASE="%OPENSSL_LIBS_DIR%\\libssl.lib %OPENSSL_LIBS_DIR%\\libcrypto.lib Ws2_32.lib Gdi32.lib Advapi32.lib Crypt32.lib User32.lib" ^
         -I "%MOZJPEG_DIR%" ^
-        LIBJPEG_LIBS_DEBUG="%MOZJPEG_DIR%\\Debug\\jpeg-static.lib" ^
+        LIBJPEG_LIBS_DEBUG="%MOZJPEG_DIR%\\Release\\jpeg-static.lib" ^
         LIBJPEG_LIBS_RELEASE="%MOZJPEG_DIR%\\Release\\jpeg-static.lib" ^
         -system-webp ^
         -I "%WEBP_DIR%\\src" ^
@@ -1668,10 +1583,10 @@ win:
     )
     cd ..
 
-    SET CONFIGURATIONS=-debug
+    SET CONFIGURATIONS=-release
     SET ASSERTS=
 release:
-    SET CONFIGURATIONS=-debug-and-release
+    SET CONFIGURATIONS=-release
 win_asserts:
     SET ASSERTS=-force-asserts
 win:
@@ -1685,7 +1600,6 @@ win:
     configure -prefix "%LIBS_DIR%\\Qt-%QT%" ^
         %CONFIGURATIONS% ^
         %ASSERTS% ^
-        -force-debug-info ^
         -opensource ^
         -confirm-license ^
         -static ^
@@ -1700,17 +1614,17 @@ win:
         -- ^
         -D OPENSSL_FOUND=1 ^
         -D OPENSSL_INCLUDE_DIR="%OPENSSL_DIR%\\include" ^
-        -D LIB_EAY_DEBUG="%OPENSSL_LIBS_DIR%.dbg\\libcrypto.lib" ^
-        -D SSL_EAY_DEBUG="%OPENSSL_LIBS_DIR%.dbg\\libssl.lib" ^
+        -D LIB_EAY_DEBUG="%OPENSSL_LIBS_DIR%\\libcrypto.lib" ^
+        -D SSL_EAY_DEBUG="%OPENSSL_LIBS_DIR%\\libssl.lib" ^
         -D LIB_EAY_RELEASE="%OPENSSL_LIBS_DIR%\\libcrypto.lib" ^
         -D SSL_EAY_RELEASE="%OPENSSL_LIBS_DIR%\\libssl.lib" ^
         -D JPEG_FOUND=1 ^
         -D JPEG_INCLUDE_DIR="%MOZJPEG_DIR%" ^
-        -D JPEG_LIBRARY_DEBUG="%MOZJPEG_DIR%\\Debug\\jpeg-static.lib" ^
+        -D JPEG_LIBRARY_DEBUG="%MOZJPEG_DIR%\\Release\\jpeg-static.lib" ^
         -D JPEG_LIBRARY_RELEASE="%MOZJPEG_DIR%\\Release\\jpeg-static.lib" ^
         -D ZLIB_FOUND=1 ^
         -D ZLIB_INCLUDE_DIR="%ZLIB_LIBS_DIR%" ^
-        -D ZLIB_LIBRARY_DEBUG="%ZLIB_LIBS_DIR%\\Debug\\libzsd.lib" ^
+        -D ZLIB_LIBRARY_DEBUG="%ZLIB_LIBS_DIR%\\Release\\libzs.lib" ^
         -D ZLIB_LIBRARY_RELEASE="%ZLIB_LIBS_DIR%\\Release\\libzs.lib" ^
         -D WebP_INCLUDE_DIR="%WEBP_DIR%\\src" ^
         -D WebP_demux_INCLUDE_DIR="%WEBP_DIR%\\src" ^
@@ -1722,10 +1636,8 @@ win:
         -D LCMS2_INCLUDE_DIR="%LCMS2_DIR%\\include" ^
         -D LCMS2_LIBRARIES="%LCMS2_DIR%\\out\\Release\\src\\liblcms2.a"
 
-    cmake --build . --config Debug
-    cmake --install . --config Debug
-    cmake --build .
-    cmake --install .
+    cmake --build . --config Release
+    cmake --install . --config Release
 """)
 
 stage('tg_owt', """
@@ -1750,7 +1662,6 @@ win:
         -DTG_OWT_LIBVPX_INCLUDE_PATH=$LIBVPX_PATH \
         -DTG_OWT_OPENH264_INCLUDE_PATH=$OPENH264_PATH \
         -DTG_OWT_FFMPEG_INCLUDE_PATH=$FFMPEG_PATH
-    cmake --build out --config Debug
 release:
     cmake --build out --config Release
 mac:
@@ -1835,7 +1746,6 @@ win:
         -D ADA_TOOLS=OFF ^
         -D ADA_INCLUDE_URL_PATTERN=OFF ^
         -D CMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded$<$<CONFIG:Debug>:Debug>"
-    cmake --build out --config Debug
     cmake --build out --config Release
 mac:
     CFLAGS="$UNGUARDED" CPPFLAGS="$UNGUARDED" cmake -B build . \\
@@ -1858,28 +1768,7 @@ win:
     %THIRDPARTY_DIR%\\msys64\\usr\\bin\\sed -i "s/STREQUAL/MATCHES/" td/generate/CMakeLists.txt
     mkdir out
     cd out
-    mkdir Debug
-    cd Debug
-    cmake ^
-        -DOPENSSL_FOUND=1 ^
-        -DOPENSSL_INCLUDE_DIR=%OPENSSL_DIR%\\include ^
-        -DOPENSSL_CRYPTO_LIBRARY="%OPENSSL_LIBS_DIR%.dbg\\libcrypto.lib" ^
-        -DZLIB_FOUND=1 ^
-        -DZLIB_INCLUDE_DIR=%ZLIB_LIBS_DIR% ^
-        -DZLIB_LIBRARIES="%ZLIB_LIBS_DIR%\\Debug\\libzsd.lib" ^
-        -DCMAKE_CONFIGURATION_TYPES=Debug ^
-        -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded$<$<CONFIG:Debug>:Debug>" ^
-        -DCMAKE_POLICY_DEFAULT_CMP0091=NEW ^
-        -DCMAKE_C_FLAGS="/DZLIB_WINAPI" ^
-        -DCMAKE_CXX_FLAGS="/DZLIB_WINAPI" ^
-        -DCMAKE_EXE_LINKER_FLAGS="/SAFESEH:NO Ws2_32.lib Gdi32.lib Advapi32.lib Crypt32.lib User32.lib %OPENSSL_LIBS_DIR%.dbg\\libssl.lib" ^
-        -DCMAKE_SHARED_LINKER_FLAGS="/SAFESEH:NO Ws2_32.lib Gdi32.lib Advapi32.lib Crypt32.lib User32.lib %OPENSSL_LIBS_DIR%.dbg\\libssl.lib" ^
-        -DTD_ENABLE_MULTI_PROCESSOR_COMPILATION=ON ^
-        -DTD_E2E_ONLY=ON ^
-        ../..
-    cmake --build . --config Debug
 release:
-    cd ..
     mkdir Release
     cd Release
     cmake ^
