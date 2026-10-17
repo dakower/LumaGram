@@ -17,6 +17,7 @@ jobs:
 
     env:
       PREPARE_PATH: "Telegram/build/prepare/prepare.py"
+      PreferredToolArchitecture: "x64"
 
     steps:
       - name: Prepare directories
@@ -49,6 +50,7 @@ jobs:
           echo "SDK=$SDK" >> $GITHUB_ENV
 
           sed -i '/CMAKE_${lang}_FLAGS_DEBUG_INIT/s/${_Zi}//' "$PROGRAMFILES"/CMake/share/cmake*/Modules/Platform/Windows-MSVC.cmake
+          sed -i 's/-T v143/-T v143,host=x64/g' $TBUILD/$REPO_NAME/cmake/run_cmake.py
 
           echo "$(sha256sum $TBUILD/$REPO_NAME/$PREPARE_PATH | awk '{ print $1 }')" >> CACHE_KEY.txt
           echo "$SDK" >> CACHE_KEY.txt
@@ -199,7 +201,7 @@ jobs:
           cmd /c "configure.bat x64 -D TDESKTOP_API_ID=2040 -D TDESKTOP_API_HASH=b18441a1ff607e10a989891a5462e627 -D CMAKE_CONFIGURATION_TYPES=Release -D DESKTOP_APP_SPECIAL_TARGET=win64 -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON -D DESKTOP_APP_DISABLE_CRASH_REPORTS=ON"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-          cmake --build ..\out --config Release --target Telegram -- /m:1 /p:CL_MPCount=3 2>&1 | Tee-Object -FilePath "$env:TBUILD\build.log"
+          cmake --build ..\out --config Release --target Telegram --parallel -- /p:PreferredToolArchitecture=x64 /p:UseMultiToolTask=true /p:EnforceProcessCountAcrossBuilds=true 2>&1 | Tee-Object -FilePath "$env:TBUILD\build.log"
           if ($LASTEXITCODE -ne 0) {
             Write-Host "=== COMPILER ERRORS SUMMARY ==="
             Select-String -Path "$env:TBUILD\build.log" -Pattern "error C|error LNK|error RC|CUSTOMBUILD : error|RCC: Error|Error :" -Context 2,2 | ForEach-Object { Write-Host $_.ToString() }
